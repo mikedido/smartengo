@@ -1,0 +1,27 @@
+version : '3'
+services : 
+    smart-auth:
+        build: 
+            context: ./docker
+            dockerfile:
+        port:
+            9000:9000
+        depends_on:
+            - db
+            - smart-doctrine
+    smart-doctrine:
+        build: 
+            context: ./docker
+            dockerfile:
+        port:
+            9001:9001
+        depends_on:
+            - db
+    db:
+        images: mysql
+        environment: 
+            MYSQL_ROOT_PASSWORD : 'root'
+            MYSQL_DATABASE: 'smart'
+        port:
+            3306:3306
+volumes: 
