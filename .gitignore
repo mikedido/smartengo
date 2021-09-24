@@ -1,3 +1,7 @@
 #node_modules
 smart-auth/node_modules/
 smart-auth/package-lock.json
+
+#bundles
+smart-dcotrina/public/bundles/
+smart-doctrina/symfony.lock
