@@ -1,7 +1,10 @@
-#node_modules
+# NODE MODULES
 smart-auth/node_modules/
 smart-auth/package-lock.json
 
-#bundles
+# SYMFONY BUNDLES 
 smart-dcotrina/public/bundles/
 smart-doctrina/symfony.lock
+
+# DOCKER VOLUMES
+db_data/
