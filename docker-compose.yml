@@ -1,27 +1,28 @@
 version : '3'
-services : 
+services :
     smart-auth:
-        build: 
-            context: ./docker
-            dockerfile:
-        port:
-            9000:9000
+        build: ./docker/auth/
+        ports:
+            - 9000:3000
+        depends_on:
+            - smart-doctrina
+        volumes:
+            - ./smart-auth/:/usr/src/app
+    smart-doctrina:
+        build:  ./docker/doctrina/
+        ports:
+            - 9001:80
         depends_on:
             - db
-            - smart-doctrine
-    smart-doctrine:
-        build: 
-            context: ./docker
-            dockerfile:
-        port:
-            9001:9001
-        depends_on:
-            - db
+        volumes: 
+            - ./docker/doctrina/:/etc/apache2/sites-enabled
+            - ./smart-doctrina/:/var/www/
     db:
-        images: mysql
+        image: mysql
         environment: 
             MYSQL_ROOT_PASSWORD : 'root'
-            MYSQL_DATABASE: 'smart'
-        port:
-            3306:3306
-volumes: 
+            MYSQL_DATABASE: 'root'
+        ports:
+            - 3306:3306
+        volumes:
+            - ./db-data:/var/lib/mysql
