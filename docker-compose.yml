@@ -1,4 +1,5 @@
 version : '3'
+
 services :
     smart-auth:
         build: ./docker/auth/
@@ -8,6 +9,9 @@ services :
             - smart-doctrina
         volumes:
             - ./smart-auth/:/usr/src/app
+        networks:
+            - smart
+
     smart-doctrina:
         build:  ./docker/doctrina/
         ports:
@@ -17,12 +21,23 @@ services :
         volumes: 
             - ./docker/doctrina/:/etc/apache2/sites-enabled
             - ./smart-doctrina/:/var/www/
+        networks:
+            - smart
+
     db:
         image: mysql
         environment: 
             MYSQL_ROOT_PASSWORD : 'root'
-            MYSQL_DATABASE: 'root'
+            MYSQL_PASSWORD: 'password'
+            MYSQL_USER: 'root'
+            MYSQL_DATABASE: 'doctrina'
         ports:
             - 3306:3306
         volumes:
             - ./db_data:/var/lib/mysql
+        networks:
+            - smart
+
+networks:
+    smart:
+        driver: bridge
