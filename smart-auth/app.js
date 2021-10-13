@@ -1,14 +1,18 @@
 const express = require('express');
-const app = express();
-const userRouter = require('./router/user');
+const loaders = require('./loaders');
 
+function startServer() {
+    const app = express();
 
-//API router 
-app.use('/v1/users', userRouter);
+    loaders(app);
 
-
-if (process.env.NODE_ENV !== 'test') {
-    app.listen(process.env.PORT || 3000);
+    app.listen(process.env.PORT || 3000, error => {
+        if (error) {
+            console.log(error);
+            return;
+        }
+        console.log('Your server is running !');
+    });
 }
 
-module.exports = app;
+startServer();
