@@ -3,63 +3,41 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\TagRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource()
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass=TagRepository::class)
  */
 class Tag
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $title;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Article::class, mappedBy="tag")
-     */
-    private $articles;
-
-    public function __construct()
+    public function getId(): ?int
     {
-        $this->articles = new ArrayCollection();
+        return $this->id;
     }
 
-    /**
-     * @return Collection|Article[]
-     */
-    public function getArticles(): Collection
+    public function getTitle(): ?string
     {
-        return $this->articles;
+        return $this->title;
     }
 
-    public function addArticle(Article $article): self
+    public function setTitle(string $title): self
     {
-        if (!$this->articles->contains($article)) {
-            $this->articles[] = $article;
-            $article->addTag($this);
-        }
+        $this->title = $title;
 
         return $this;
     }
-
-    public function removeArticle(Article $article): self
-    {
-        if ($this->articles->removeElement($article)) {
-            $article->removeTag($this);
-        }
-
-        return $this;
-    }
-
 }

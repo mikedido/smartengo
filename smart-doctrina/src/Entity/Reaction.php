@@ -3,65 +3,41 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\ReactionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource()
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass=ReactionRepository::class)
  */
 class Reaction
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
-    private $content;
+    private $type;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Article::class, inversedBy="reactions")
-     */
-    private $article;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="reactions")
-     */
-    private $user;
-
-    public function __construct()
+    public function getId(): ?int
     {
-        $this->users = new ArrayCollection();
+        return $this->id;
     }
 
-    public function getArticle(): ?Article
+    public function getType(): ?string
     {
-        return $this->article;
+        return $this->type;
     }
 
-    public function setArticle(?Article $article): self
+    public function setType(string $type): self
     {
-        $this->article = $article;
+        $this->type = $type;
 
         return $this;
     }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
 }
