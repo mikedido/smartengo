@@ -5,6 +5,8 @@ smart-auth/package-lock.json
 # SYMFONY BUNDLES 
 smart-dcotrina/public/bundles/
 smart-doctrina/symfony.lock
+smart-doctrina/composer.lock
+
 
 # DOCKER VOLUMES
 db_data/
