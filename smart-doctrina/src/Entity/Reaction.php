@@ -3,51 +3,50 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\ReactionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource()
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass=ReactionRepository::class)
  */
 class Reaction
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
-    private $content;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Article::class, inversedBy="reactions")
-     */
-    private $article;
+    private $type;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="reactions")
      */
     private $user;
 
-    public function __construct()
+    /**
+     * @ORM\ManyToOne(targetEntity=Article::class, inversedBy="reactions")
+     */
+    private $article;
+
+    public function getId(): ?int
     {
-        $this->users = new ArrayCollection();
+        return $this->id;
     }
 
-    public function getArticle(): ?Article
+    public function getType(): ?string
     {
-        return $this->article;
+        return $this->type;
     }
 
-    public function setArticle(?Article $article): self
+    public function setType(string $type): self
     {
-        $this->article = $article;
+        $this->type = $type;
 
         return $this;
     }
@@ -64,4 +63,15 @@ class Reaction
         return $this;
     }
 
+    public function getArticle(): ?Article
+    {
+        return $this->article;
+    }
+
+    public function setArticle(?Article $article): self
+    {
+        $this->article = $article;
+
+        return $this;
+    }
 }

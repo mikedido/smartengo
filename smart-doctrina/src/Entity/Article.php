@@ -3,40 +3,41 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Repository\ArticleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource()
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass=ArticleRepository::class)
  */
 class Article
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $reference;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="text")
      */
     private $content;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="boolean")
      */
     private $draft;
 
@@ -46,10 +47,9 @@ class Article
     private $comments;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="articles")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="articles")
      */
-    private $user;
+    private $tag;
 
     /**
      * @ORM\OneToMany(targetEntity=Reaction::class, mappedBy="article")
@@ -57,15 +57,69 @@ class Article
     private $reactions;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="articles")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="articles")
+     * @ORM\Column(nullable=false)
      */
-    private $tag;
+    private $user;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
-        $this->reactions = new ArrayCollection();
         $this->tag = new ArrayCollection();
+        $this->reactions = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(?string $reference): self
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    public function getDraft(): ?bool
+    {
+        return $this->draft;
+    }
+
+    public function setDraft(bool $draft): self
+    {
+        $this->draft = $draft;
+
+        return $this;
     }
 
     /**
@@ -98,14 +152,26 @@ class Article
         return $this;
     }
 
-    public function getUser(): ?User
+    /**
+     * @return Collection|Tag[]
+     */
+    public function getTag(): Collection
     {
-        return $this->user;
+        return $this->tag;
     }
 
-    public function setUser(?User $user): self
+    public function addTag(Tag $tag): self
     {
-        $this->user = $user;
+        if (!$this->tag->contains($tag)) {
+            $this->tag[] = $tag;
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        $this->tag->removeElement($tag);
 
         return $this;
     }
@@ -140,28 +206,15 @@ class Article
         return $this;
     }
 
-    /**
-     * @return Collection|Tag[]
-     */
-    public function getTag(): Collection
+    public function getUser(): ?int
     {
-        return $this->tag;
+        return $this->user;
     }
 
-    public function addTag(Tag $tag): self
+    public function setUser(int $user): self
     {
-        if (!$this->tag->contains($tag)) {
-            $this->tag[] = $tag;
-        }
+        $this->user = $user;
 
         return $this;
     }
-
-    public function removeTag(Tag $tag): self
-    {
-        $this->tag->removeElement($tag);
-
-        return $this;
-    }
-
 }
