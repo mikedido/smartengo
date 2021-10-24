@@ -24,6 +24,16 @@ class Reaction
      */
     private $type;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="reactions")
+     */
+    private $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Article::class, inversedBy="reactions")
+     */
+    private $article;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -37,6 +47,30 @@ class Reaction
     public function setType(string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getArticle(): ?Article
+    {
+        return $this->article;
+    }
+
+    public function setArticle(?Article $article): self
+    {
+        $this->article = $article;
 
         return $this;
     }
